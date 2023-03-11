@@ -1,9 +1,9 @@
-use std;
+#![allow(clippy::upper_case_acronyms)]
 
+use std::u128;
 use gethostname::gethostname;
 use pyo3::prelude::*;
 use radix_fmt::radix_36;
-
 use rand::{distributions::Alphanumeric, Rng};
 
 fn string_radix_36(string: String, length: usize) -> String {
@@ -58,9 +58,9 @@ impl UUIDT {
 }
 
 /// Creates a new UUIDT object.
-#[pyfunction(name = "uuidt")]
-fn uuidt_fn(namespace: String) -> PyResult<UUIDT> {
-    if namespace.len() == 0 {
+#[pyfunction]
+fn new(namespace: String) -> PyResult<UUIDT> {
+    if namespace.is_empty() {
         return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
             "Namespace cannot be empty.",
         ));
@@ -76,7 +76,8 @@ fn uuidt_fn(namespace: String) -> PyResult<UUIDT> {
         .sample_iter(&Alphanumeric)
         .take(12)
         .map(char::from)
-        .collect::<String>();
+        .collect::<String>()
+        .to_lowercase();
 
     Ok(UUIDT {
         namespace,
@@ -86,10 +87,39 @@ fn uuidt_fn(namespace: String) -> PyResult<UUIDT> {
     })
 }
 
+/// Extract the timestamp from a UUIDT string.
+#[pyfunction]
+fn extract_timestamp(uuidt: String) -> PyResult<u128> {
+    if uuidt.is_empty() {
+        return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
+            "UUIDT cannot be empty.",
+        ));
+    }
+
+    let uuidt_parts: Vec<&str> = uuidt.split('-').collect();
+    if uuidt_parts.len() != 5 {
+        return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
+            "Invalid UUIDT.",
+        ));
+    }
+
+    let timestamp_part_1 = uuidt_parts[0];
+    let timestamp_part_2 = uuidt_parts[1];
+
+    let timestamp = format!("{}{}", timestamp_part_1, timestamp_part_2);
+    match u128::from_str_radix(&timestamp, 36) {
+        Ok(timestamp) => Ok(timestamp),
+        Err(_) => Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
+            "Invalid UUIDT.",
+        )),
+    }
+}
+
 /// Timestamp-orderable UUIDs for Python, written in Rust.
 #[pymodule]
 fn uuidt(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(uuidt_fn, m)?)?;
+    m.add_function(wrap_pyfunction!(new, m)?)?;
+    m.add_function(wrap_pyfunction!(extract_timestamp, m)?)?;
     m.add_class::<UUIDT>()?;
     Ok(())
 }

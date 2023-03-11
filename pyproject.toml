@@ -6,8 +6,8 @@ build-backend = "maturin"
 name = "uuidt"
 version = "0.1.0"
 description = "Timestamp-orderable UUIDs for Python, written in Rust."
-authors = ["Isaac Harris-Holt <isaac@harris-holt.com>"]
-maintainers = ["Isaac Harris-Holt <isaac@harris-holt.com>"]
+authors = [{ name = "Isaac Harris-Holt", email = "isaac@harris-holt.com" }]
+maintainers = [{ name = "Isaac Harris-Holt", email = "isaac@harris-holt.com" }]
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.7"
