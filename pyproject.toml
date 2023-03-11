@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "uuidt"
-version = "0.1.0"
+version = "0.1.1"
 description = "Timestamp-orderable UUIDs for Python, written in Rust."
 authors = [{ name = "Isaac Harris-Holt", email = "isaac@harris-holt.com" }]
 maintainers = [{ name = "Isaac Harris-Holt", email = "isaac@harris-holt.com" }]
