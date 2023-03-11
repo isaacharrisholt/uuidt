@@ -1,0 +1,15 @@
+[package]
+name = "uuidt"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "uuidt"
+crate-type = ["cdylib"]
+
+[dependencies]
+gethostname = "0.4.1"
+pyo3 = "0.18.1"
+radix_fmt = "1.0.0"
+rand = "0.8.5"
