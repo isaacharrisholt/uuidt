@@ -54,7 +54,7 @@ timestamp from a UUID1.
 
 ## Why Rust?
 
-Mostly as a learning oppotunity for me, though also for speed. The Rust
+Mostly as a learning opportunity for me, though also for speed. The Rust
 implementation is significantly faster than the Python implementation, which
 used Numpy to convert to base-36.
 
